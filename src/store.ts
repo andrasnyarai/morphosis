@@ -1,12 +1,13 @@
 import { create, StoreApi, UseBoundStore } from "zustand";
-
+import { Remote } from "comlink";
 import {
   AbstractProvider,
   EtherscanProvider,
   HDNodeWallet,
   JsonRpcProvider,
 } from "ethers";
-import { Remote } from "comlink";
+
+import { workerInstance } from "./workerInstance";
 
 type WithSelectors<S> = S extends { getState: () => infer T }
   ? S & { use: { [K in keyof T]: () => T[K] } }
@@ -23,10 +24,6 @@ const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(
 
   return store;
 };
-
-const worker = new ComlinkWorker<typeof import("./worker")>(
-  new URL("./worker", import.meta.url)
-);
 
 const provider = new EtherscanProvider("sepolia");
 
@@ -57,7 +54,7 @@ type Store = {
 
 const useStoreBase = create<Store>((set) => ({
   lock: false,
-  worker,
+  worker: workerInstance,
   setLock: (lock: boolean) => set({ lock }),
   provider: providers[defaultProviderName],
   providerName: defaultProviderName,

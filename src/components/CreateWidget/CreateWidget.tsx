@@ -33,8 +33,11 @@ export const CreateWidget: FC = () => {
   return (
     <div className={classes.container}>
       <div className={classes.inputContainer}>
-        <div>password for my new wallet: </div>
+        <label htmlFor="wallet-main-password">
+          password for my new wallet:{" "}
+        </label>
         <input
+          id="wallet-main-password"
           value={password}
           type="password"
           className={classes.input}
