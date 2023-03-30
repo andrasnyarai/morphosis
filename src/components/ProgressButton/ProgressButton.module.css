@@ -1,0 +1,11 @@
+@keyframes fade {
+  0% {
+    color: rgb(237, 108, 108);
+  }
+  50% {
+    color: rgb(88, 88, 200);
+  }
+  100% {
+    color: rgb(237, 108, 108);
+  }
+}

@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px;
+}
+
+.switcher {
+  user-select: none;
+  cursor: pointer;
+  padding-left: 15px;
+  text-decoration: underline;
+  color: rgb(169, 160, 224);
+  width: 30px;
+}

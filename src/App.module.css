@@ -1,0 +1,10 @@
+.title {
+  text-align: left;
+  padding: 5px;
+}
+
+.wallets {
+  padding: 5px;
+  display: grid;
+  grid-gap: 5px;
+}

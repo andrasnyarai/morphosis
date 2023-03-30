@@ -1,0 +1,14 @@
+.walletContainer {
+  text-align: left;
+  display: grid;
+  grid-gap: 5px;
+  padding: 7.5px;
+  border-radius: 7.5px;
+  border: black 1px dotted;
+}
+
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

@@ -1,0 +1,18 @@
+.container {
+  padding: 5px;
+  display: grid;
+  grid-gap: 15px;
+}
+
+.inputContainer {
+  display: flex;
+}
+
+.input {
+  margin-left: 5px;
+}
+
+.buttonContainer {
+  display: grid;
+  grid-gap: 5px;
+}
