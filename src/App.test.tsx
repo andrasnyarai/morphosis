@@ -17,7 +17,7 @@ vi.mock("./workerInstance", () => {
   };
 });
 
-describe("creating a wallet", () => {
+describe("App", () => {
   it("should create a wallet with mocked address", async () => {
     render(<App />);
 
