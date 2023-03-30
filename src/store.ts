@@ -1,4 +1,5 @@
 import { create, StoreApi, UseBoundStore } from "zustand";
+import { persist } from "zustand/middleware";
 import { Remote } from "comlink";
 import {
   AbstractProvider,
@@ -52,34 +53,43 @@ type Store = {
   addWallet: (wallet: HDNodeWallet) => void;
 };
 
-const useStoreBase = create<Store>((set) => ({
-  lock: false,
-  worker: workerInstance,
-  setLock: (lock: boolean) => set({ lock }),
-  provider: providers[defaultProviderName],
-  providerName: defaultProviderName,
-  wallets: Object.keys(providers).reduce(
-    (acc, key) => ({ [key]: [], ...acc }),
-    {} as Store["wallets"]
-  ),
-  changeProvider: () =>
-    set((state) => {
-      const nextProviderName =
-        state.providerName === defaultProviderName
-          ? "bnb"
-          : defaultProviderName;
-      return {
-        provider: providers[nextProviderName],
-        providerName: nextProviderName,
-      };
+const useStoreBase = create<Store>()(
+  persist(
+    (set) => ({
+      lock: false,
+      worker: workerInstance,
+      setLock: (lock: boolean) => set({ lock }),
+      provider: providers[defaultProviderName],
+      providerName: defaultProviderName,
+      wallets: Object.keys(providers).reduce(
+        (acc, key) => ({ [key]: [], ...acc }),
+        {} as Store["wallets"]
+      ),
+      changeProvider: () =>
+        set((state) => {
+          const nextProviderName =
+            state.providerName === defaultProviderName
+              ? "bnb"
+              : defaultProviderName;
+          return {
+            provider: providers[nextProviderName],
+            providerName: nextProviderName,
+          };
+        }),
+      addWallet: (wallet: HDNodeWallet) =>
+        set((state) => ({
+          wallets: {
+            ...state.wallets,
+            [state.providerName]:
+              state.wallets[state.providerName].concat(wallet),
+          },
+        })),
     }),
-  addWallet: (wallet: HDNodeWallet) =>
-    set((state) => ({
-      wallets: {
-        ...state.wallets,
-        [state.providerName]: state.wallets[state.providerName].concat(wallet),
-      },
-    })),
-}));
+    {
+      name: "morphosis",
+      partialize: (state) => ({ wallets: state.wallets }),
+    }
+  )
+);
 
 export const useStore = createSelectors(useStoreBase);
