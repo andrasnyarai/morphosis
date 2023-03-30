@@ -85,6 +85,4 @@ const useStoreBase = create<Store>((set) => ({
     })),
 }));
 
-// https://docs.pmnd.rs/zustand/integrations/persisting-store-data
-
 export const useStore = createSelectors(useStoreBase);

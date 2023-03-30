@@ -1,7 +1,3 @@
-// https://www.quicknode.com/guides/ethereum-development/wallets/how-to-generate-a-new-ethereum-address-in-javascript/
-// https://docs.ethers.org/v5/concepts/security/
-// https://julien-maffre.medium.com/what-is-an-ethereum-keystore-file-86c8c5917b97
-
 // https://stackoverflow.com/a/42321673
 export const getRandomIntInclusive = (min: number, max: number) => {
   const randomBuffer = new Uint32Array(1);
