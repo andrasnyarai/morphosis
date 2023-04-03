@@ -18,13 +18,14 @@ export const Wallet: FC<Props> = ({ wallet }) => {
   const [password, setPassword] = useState("");
   const [balance, setBalance] = useState("0.0");
   const [privateKey, setPrivateKey] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [privateKeyIsLoading, setPrivateKeyIsLoading] = useState(false);
+  const [balanceIsLoading, setBalanceIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const prefixedAddress = `0x${wallet.address}`;
 
   const decryptWallet = async () => {
-    setIsLoading(true);
+    setPrivateKeyIsLoading(true);
     setLock(true);
     try {
       const _privateKey = await worker.getPrivateKey(wallet, password);
@@ -35,15 +36,17 @@ export const Wallet: FC<Props> = ({ wallet }) => {
       setTimeout(() => setError(false), 2000);
     } finally {
       setLock(false);
-      setIsLoading(false);
+      setPrivateKeyIsLoading(false);
     }
   };
 
   useEffect(() => {
     async function getBalance() {
+      setBalanceIsLoading(true);
       const balance = await provider.getBalance(prefixedAddress);
       const balanceInEth = formatEther(balance);
       setBalance(balanceInEth);
+      setBalanceIsLoading(false);
     }
     getBalance();
   }, []);
@@ -52,7 +55,9 @@ export const Wallet: FC<Props> = ({ wallet }) => {
     <div className={classes.walletContainer}>
       <div>address: {prefixedAddress}</div>
       <div>
-        balance: {balance} {providerName.toUpperCase()}
+        {balanceIsLoading
+          ? "getting your balance..."
+          : `balance: ${balance} ${providerName.toUpperCase()}`}
       </div>
       <div className={classes.buttonContainer}>
         {privateKey ? (
@@ -64,7 +69,7 @@ export const Wallet: FC<Props> = ({ wallet }) => {
               placeholder="password"
               type="password"
               onChange={(event) => {
-                if (isLoading) return;
+                if (privateKeyIsLoading) return;
                 setPassword(event.target.value);
               }}
             />
@@ -72,7 +77,7 @@ export const Wallet: FC<Props> = ({ wallet }) => {
               <div>wrong password</div>
             ) : (
               <ProgressButton
-                isLoading={isLoading}
+                isLoading={privateKeyIsLoading}
                 isDisabled={!password}
                 loadingText="getting your private key"
                 buttonText="show private key"
